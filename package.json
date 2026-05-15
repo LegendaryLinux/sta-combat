@@ -1,0 +1,24 @@
+{
+  "name": "sta-combat",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/LegendaryLinux/sta-combat#readme",
+  "bugs": {
+    "url": "https://github.com/LegendaryLinux/sta-combat/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LegendaryLinux/sta-combat.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "host": "http-server public -p 8080 -c-1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

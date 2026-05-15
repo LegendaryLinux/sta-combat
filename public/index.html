@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STA 2e Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <h1>Star Trek Adventures 2e Control Panel</h1>
+      </header>
+
+      <nav class="tabs" aria-label="Dashboard sections">
+        <button class="tab-button" type="button" data-tab="character">Character Generation</button>
+        <button class="tab-button" type="button" data-tab="personal">Personal Combat</button>
+        <button class="tab-button" type="button" data-tab="space">Space Combat</button>
+        <button class="tab-button" type="button" data-tab="momentum">Momentum Spends</button>
+        <button class="tab-button" type="button" data-tab="glossary">Glossary</button>
+      </nav>
+
+      <main id="app" class="main-panel" tabindex="-1"></main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
