@@ -645,37 +645,50 @@ function cleanSourcebookTalentSummary(summary) {
     .trim();
 }
 
+function supplementDataSources() {
+  return [
+    globalThis.staSpeciesSourcebook,
+    globalThis.staShackletonGuide,
+    globalThis.staExplorationGuide
+  ].filter(Boolean);
+}
+
 function loadSpeciesSourcebookData() {
-  const sourcebook = globalThis.staSpeciesSourcebook;
-  if (!sourcebook) return;
+  const sourcebooks = supplementDataSources();
+  if (!sourcebooks.length) return;
 
-  parseSourcebookRows(sourcebook.speciesRows).forEach(([name, attributes, trait, ability, reminder, values]) => {
-    if (speciesExamples.some((species) => species.name.toLowerCase() === name.toLowerCase())) return;
-    speciesExamples.push({
-      name,
-      attributes,
-      trait,
-      ability,
-      reminder,
-      values: values.split("~").map((value) => value.trim()).filter(Boolean)
+  sourcebooks.forEach((sourcebook) => {
+    parseSourcebookRows(sourcebook.speciesRows || "").forEach(([name, attributes, trait, ability, reminder, values]) => {
+      if (speciesExamples.some((species) => species.name.toLowerCase() === name.toLowerCase())) return;
+      speciesExamples.push({
+        name,
+        attributes,
+        trait,
+        ability,
+        reminder,
+        values: values.split("~").map((value) => value.trim()).filter(Boolean)
+      });
     });
+
+    (sourcebook.valueAdditions || []).forEach((value) => addUniqueSorted(sampleValues, value));
+
+    Object.entries(sourcebook.focusAdditions || {}).forEach(([department, focuses]) => {
+      sampleFocuses[department] = sampleFocuses[department] || [];
+      focuses.forEach((focus) => addUniqueSorted(sampleFocuses[department], focus));
+    });
+
+    parseSourcebookRows(sourcebook.talentRows || "").forEach(([rawName, requirement, rawSummary]) => {
+      const name = normalizeSourcebookTalentName(rawName);
+      const resolvedRequirement = sourcebook.talentRequirementOverrides?.[name] || requirement;
+      if (!talentExamples["Species and Culture"].some(([existingName]) => existingName.toLowerCase() === name.toLowerCase())) {
+        talentExamples["Species and Culture"].push([name, resolvedRequirement]);
+      }
+      talentSummaries[name] = cleanSourcebookTalentSummary(rawSummary);
+    });
+    Object.assign(talentSummaries, sourcebook.talentSummaryOverrides || {});
   });
+
   speciesExamples.sort((a, b) => a.name.localeCompare(b.name));
-
-  Object.entries(sourcebook.focusAdditions || {}).forEach(([department, focuses]) => {
-    if (!sampleFocuses[department]) return;
-    focuses.forEach((focus) => addUniqueSorted(sampleFocuses[department], focus));
-  });
-
-  parseSourcebookRows(sourcebook.talentRows).forEach(([rawName, requirement, rawSummary]) => {
-    const name = normalizeSourcebookTalentName(rawName);
-    const resolvedRequirement = sourcebook.talentRequirementOverrides?.[name] || requirement;
-    if (!talentExamples["Species and Culture"].some(([existingName]) => existingName.toLowerCase() === name.toLowerCase())) {
-      talentExamples["Species and Culture"].push([name, resolvedRequirement]);
-    }
-    talentSummaries[name] = cleanSourcebookTalentSummary(rawSummary);
-  });
-  Object.assign(talentSummaries, sourcebook.talentSummaryOverrides || {});
   talentExamples["Species and Culture"].sort(([a], [b]) => a.localeCompare(b));
 }
 
@@ -828,6 +841,28 @@ const glossary = [
   ["Stun", "Injury type intended to incapacitate; a Stun Injury is removed shortly after the character stops being Defeated.", "p. 292"],
   ["Versatile X", "Starship weapon quality: on a successful attack, gain X bonus Momentum; it cannot be saved.", "p. 227"]
 ];
+
+function loadGlossaryAdditions() {
+  supplementDataSources().forEach((sourcebook) => {
+    (sourcebook.characterTraitAdditions || []).forEach((entry) => addUniqueGlossaryEntry(entry));
+    (sourcebook.terrainTraitAdditions || []).forEach((trait) => {
+      addUniqueGlossaryEntry([
+        trait,
+        "Exploration Guide environmental or scene trait for planetary biome encounters.",
+        "STA 2e Exploration Guide, pp. 51-134"
+      ]);
+    });
+  });
+  glossary.sort(([a], [b]) => a.localeCompare(b));
+}
+
+function addUniqueGlossaryEntry([term, definition, page]) {
+  if (!glossary.some(([existingTerm]) => existingTerm.toLowerCase() === term.toLowerCase())) {
+    glossary.push([term, definition, page]);
+  }
+}
+
+loadGlossaryAdditions();
 
 const momentumSpends = {
   Roleplay: [
