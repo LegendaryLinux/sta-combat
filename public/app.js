@@ -331,6 +331,9 @@ const talentExamples = {
   ]
 };
 
+talentExamples["Species and Culture"].push(...talentExamples["Augment, Cybernetic, Esoteric"]);
+delete talentExamples["Augment, Cybernetic, Esoteric"];
+
 const talentSummaries = {
   "Back-Up Plans": "Gain a preparedness benefit when earlier planning or backup resources matter.",
   "Bold (X)": "When attempting the chosen department, use risky success to generate extra Momentum.",
@@ -611,6 +614,72 @@ Object.assign(talentSummaries, {
   "Quick Study": "Ignore Difficulty or complication range increases from unfamiliar practices, techniques, procedures, or species.",
   "Stimulant Shot": "When First Aid revives a Defeated ally, add 1 Threat so they recover Stress equal to your Medicine; once per character per adventure."
 });
+
+function parseSourcebookRows(rows) {
+  return rows.split("\n").map((row) => row.trim()).filter(Boolean).map((row) => row.split("|").map((part) => part.trim()));
+}
+
+function addUniqueSorted(list, value) {
+  if (!list.some((item) => item.toLowerCase() === value.toLowerCase())) {
+    list.push(value);
+    list.sort((a, b) => a.localeCompare(b));
+  }
+}
+
+function normalizeSourcebookTalentName(name) {
+  return name
+    .replace(/^the /, "The ")
+    .replace(/^to /, "To ")
+    .replace(/^Old As /, "Old as ");
+}
+
+function cleanSourcebookTalentSummary(summary) {
+  return summary
+    .replace(/^permission\.?\s+/i, "")
+    .replace(/^sion,\s*Empathy talent\s+/i, "")
+    .replace(/^not take .*? talent\s+/i, "")
+    .replace(/^may not take .*? talent\s+/i, "")
+    .replace(/^Morphogenic Mastery if .*? talent\s+/i, "")
+    .replace(/^character creation, .*? talent\s+/i, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function loadSpeciesSourcebookData() {
+  const sourcebook = globalThis.staSpeciesSourcebook;
+  if (!sourcebook) return;
+
+  parseSourcebookRows(sourcebook.speciesRows).forEach(([name, attributes, trait, ability, reminder, values]) => {
+    if (speciesExamples.some((species) => species.name.toLowerCase() === name.toLowerCase())) return;
+    speciesExamples.push({
+      name,
+      attributes,
+      trait,
+      ability,
+      reminder,
+      values: values.split("~").map((value) => value.trim()).filter(Boolean)
+    });
+  });
+  speciesExamples.sort((a, b) => a.name.localeCompare(b.name));
+
+  Object.entries(sourcebook.focusAdditions || {}).forEach(([department, focuses]) => {
+    if (!sampleFocuses[department]) return;
+    focuses.forEach((focus) => addUniqueSorted(sampleFocuses[department], focus));
+  });
+
+  parseSourcebookRows(sourcebook.talentRows).forEach(([rawName, requirement, rawSummary]) => {
+    const name = normalizeSourcebookTalentName(rawName);
+    const resolvedRequirement = sourcebook.talentRequirementOverrides?.[name] || requirement;
+    if (!talentExamples["Species and Culture"].some(([existingName]) => existingName.toLowerCase() === name.toLowerCase())) {
+      talentExamples["Species and Culture"].push([name, resolvedRequirement]);
+    }
+    talentSummaries[name] = cleanSourcebookTalentSummary(rawSummary);
+  });
+  Object.assign(talentSummaries, sourcebook.talentSummaryOverrides || {});
+  talentExamples["Species and Culture"].sort(([a], [b]) => a.localeCompare(b));
+}
+
+loadSpeciesSourcebookData();
 
 const personalActions = {
   minor: [
@@ -1235,19 +1304,19 @@ function renderFocusStep(character) {
     </div>
     <div class="example-panel">
       ${renderSearchInput("Focus examples", "focus", character.uiSearch.focus)}
-      ${Object.entries(focusResults).map(([department, focusList]) => focusList.length ? `
-        <details class="example-category" open>
+      ${Object.entries(focusResults).map(([department, focusList]) => `
+        <details class="example-category" data-example-category="focus:${escapeHtml(department)}">
           <summary>
             <span>${escapeHtml(department)}</span>
             <span class="example-count">${focusList.length}</span>
           </summary>
           <div class="chip-list">
-            ${focusList.slice(0, 18).map((focus) => `
+            ${focusList.map((focus) => `
               <button type="button" class="example-chip" data-action="apply-array-example" data-array="focuses" data-value="${escapeHtml(focus)}">${escapeHtml(focus)}</button>
             `).join("")}
           </div>
         </details>
-      ` : "").join("")}
+      `).join("")}
     </div>
   `;
 }
@@ -1262,14 +1331,14 @@ function renderTalentStep(character) {
     </div>
     <div class="example-panel">
       ${renderSearchInput("Talent examples", "talent", character.uiSearch.talent)}
-      ${Object.entries(talentResults).map(([category, talentList]) => talentList.length ? `
-        <details class="example-category" open>
+      ${Object.entries(talentResults).map(([category, talentList]) => `
+        <details class="example-category" data-example-category="talent:${escapeHtml(category)}">
           <summary>
             <span>${escapeHtml(category)}</span>
             <span class="example-count">${talentList.length}</span>
           </summary>
           <div class="talent-list">
-            ${talentList.slice(0, 24).map(([talent, requirement]) => `
+            ${talentList.map(([talent, requirement]) => `
               <button type="button" class="talent-row" data-action="apply-array-example" data-array="talents" data-value="${escapeHtml(talent)}">
                 <span>
                   <strong>${escapeHtml(talent)}</strong>
@@ -1280,7 +1349,7 @@ function renderTalentStep(character) {
             `).join("")}
           </div>
         </details>
-      ` : "").join("")}
+      `).join("")}
     </div>
   `;
 }
@@ -1423,6 +1492,20 @@ function renderSearchInput(label, key, value) {
   `;
 }
 
+function exampleCategoryStates() {
+  return Array.from(document.querySelectorAll("[data-example-category]"))
+    .map((details) => [details.dataset.exampleCategory, details.open]);
+}
+
+function restoreExampleCategories(categoryStates) {
+  const states = new Map(categoryStates);
+  document.querySelectorAll("[data-example-category]").forEach((details) => {
+    if (states.has(details.dataset.exampleCategory)) {
+      details.open = states.get(details.dataset.exampleCategory);
+    }
+  });
+}
+
 function renderRolePicker(roleResults) {
   return `
     <div class="example-panel">
@@ -1458,7 +1541,7 @@ function renderSpeciesValueHints(character) {
   if (!species) return "";
   return `
     <div class="species-hints">
-      <details class="example-category" open>
+      <details class="example-category" data-example-category="species-values:${escapeHtml(species.name)}" open>
         <summary>
           <span>${escapeHtml(species.name)} sample values</span>
           <span class="example-count">${species.values.length}</span>
@@ -2141,9 +2224,11 @@ function handleInput(event) {
   if (event.target.matches("[data-character-search]")) {
     const character = activeCharacter();
     const key = event.target.dataset.characterSearch;
+    const categoryStates = exampleCategoryStates();
     character.uiSearch[key] = event.target.value;
     saveState();
     render();
+    restoreExampleCategories(categoryStates);
     const search = document.querySelector(`[data-character-search="${key}"]`);
     if (search) {
       search.focus();
