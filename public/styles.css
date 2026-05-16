@@ -310,6 +310,8 @@ select:focus {
 }
 
 .character-list button {
+  display: grid;
+  gap: 6px;
   width: 100%;
   text-align: left;
   border: 1px solid var(--line);
@@ -324,9 +326,30 @@ select:focus {
   box-shadow: inset 4px 0 0 var(--accent);
 }
 
-.wizard-progress {
+.draft-heading {
+  align-items: baseline;
   display: flex;
   flex-wrap: wrap;
+  gap: 5px;
+}
+
+.draft-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.draft-meta strong {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.wizard-progress {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
   gap: 6px;
   margin: 14px 0;
   padding-bottom: 4px;
@@ -336,8 +359,9 @@ select:focus {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  flex: 0 0 auto;
+  justify-content: flex-start;
   min-height: 36px;
+  min-width: 0;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--track);

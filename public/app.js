@@ -2,6 +2,7 @@ const STORAGE_KEY = "sta2e-dashboard:v1";
 
 const attributes = ["Control", "Daring", "Fitness", "Insight", "Presence", "Reason"];
 const departments = ["Command", "Conn", "Engineering", "Medicine", "Science", "Security"];
+const divisions = ["Command", "Operations", "Sciences"];
 const shipSystems = ["Comms", "Computers", "Engines", "Sensors", "Structure", "Weapons"];
 const shipDepartments = ["Command", "Conn", "Engineering", "Medicine", "Science", "Security"];
 
@@ -25,14 +26,6 @@ const characterTypes = {
     focusCount: 3,
     valueCount: 0,
     page: "pp. 145-146"
-  },
-  supervisory: {
-    label: "Supervisory supporting character",
-    attributeArray: [10, 10, 9, 9, 8, 8],
-    departmentArray: [4, 4, 3, 2, 2, 1],
-    focusCount: 4,
-    valueCount: 1,
-    page: "p. 146"
   }
 };
 
@@ -48,36 +41,23 @@ const creationSteps = [
 const wizardSteps = {
   main: [
     ["mode", "Mode"],
-    ["concept", "Role"],
+    ["concept", "Details"],
     ["attributes", "Attributes"],
     ["species", "Species"],
     ["departments", "Departments"],
-    ["value", "Value"],
     ["focuses", "Focuses"],
     ["talents", "Talents"],
+    ["value", "Values"],
     ["review", "Review"]
   ],
   support: [
     ["mode", "Mode"],
-    ["purpose", "Purpose"],
+    ["purpose", "Details"],
     ["attributes", "Attributes"],
     ["species", "Species"],
     ["departments", "Departments"],
     ["focuses", "Focuses"],
     ["talents", "Talents"],
-    ["finish", "Finish"],
-    ["review", "Review"]
-  ],
-  supervisory: [
-    ["mode", "Mode"],
-    ["purpose", "Purpose"],
-    ["attributes", "Attributes"],
-    ["species", "Species"],
-    ["departments", "Departments"],
-    ["focuses", "Focuses"],
-    ["value", "Value"],
-    ["talents", "Talents"],
-    ["finish", "Finish"],
     ["review", "Review"]
   ]
 };
@@ -931,7 +911,7 @@ function ensureState(nextState) {
 }
 
 function normalizeCharacter(character) {
-  const type = character.type || "main";
+  const type = character.type === "support" || character.type === "supervisory" ? "support" : "main";
   const base = createCharacter(type);
   const nextCharacter = {
     ...base,
@@ -1056,12 +1036,17 @@ function renderCharacterTab() {
         <div class="character-list">
           ${state.characters.map((item) => `
             <button type="button" class="${item.id === character.id ? "is-active" : ""}" data-action="select-character" data-id="${item.id}">
-              <strong>${escapeHtml(item.name || "Unnamed character")}</strong>
-              <span class="small">${characterTypes[item.type]?.label || "Character"}</span>
+              <span class="draft-heading">
+                <strong>${escapeHtml(item.name || "New Character")}</strong>
+                <span class="small">(${characterTypes[item.type]?.label || "Character"})</span>
+              </span>
+              <span class="draft-meta">
+                <span><strong>Species</strong> ${escapeHtml(item.species || "-")}</span>
+                <span><strong>Rank</strong> ${escapeHtml(item.rank || "No rank")}</span>
+              </span>
             </button>
           `).join("")}
         </div>
-        ${renderPlayAidCard(character)}
       </aside>
     </div>
   `;
@@ -1127,7 +1112,7 @@ function renderModeStep(character) {
         <button type="button" class="mode-card ${character.type === type ? "is-active" : ""}" data-action="set-character-field" data-field="type" data-value="${type}">
           <strong>${config.label}</strong>
           <span>${config.page}</span>
-          <span>${type === "main" ? "Creation in Play for a player character." : type === "support" ? "A lighter crew character introduced through Crew Support." : "A more capable supporting character for senior roles."}</span>
+          <span>${type === "main" ? "Creation in Play for a player character." : "A lighter crew character introduced through Crew Support."}</span>
         </button>
       `).join("")}
     </div>
@@ -1141,11 +1126,9 @@ function renderConceptStep(character) {
     <p class="source-note">Creation in Play starts by deciding what job this character fills and what they bring to the crew.</p>
     <div class="field-grid">
       ${renderField("Name", "input", "name", character.name)}
-      ${renderField("Rank or title", "input", "rank", character.rank)}
+      ${renderField("Rank", "input", "rank", character.rank)}
       ${renderField("Role", "input", "role", character.role)}
-      ${renderField("Division or department", "input", "division", character.division)}
-      ${renderField("Career trait", "input", "careerTrait", character.careerTrait)}
-      ${renderField("Starting equipment notes", "textarea", "equipment", character.equipment)}
+      ${renderField("Division", "select", "division", character.division, [["", "---"], ...divisions.map((item) => [item, item])])}
     </div>
     ${renderRolePicker(roleResults)}
     ${renderRankPicker(character)}
@@ -1158,11 +1141,9 @@ function renderPurposeStep(character) {
     <p class="source-note">Supporting characters start with a purpose, a matching department, and a trait describing their place in the crew.</p>
     <div class="field-grid">
       ${renderField("Name", "input", "name", character.name)}
-      ${renderField("Rank or title", "input", "rank", character.rank)}
-      ${renderField("Purpose", "input", "purpose", character.purpose)}
-      ${renderField("Primary department", "select", "division", character.division, [["", "Choose a department"], ...departments.map((item) => [item, item])])}
-      ${renderField("Purpose trait", "input", "assignmentTrait", character.assignmentTrait)}
-      ${renderField("Notes", "textarea", "notes", character.notes)}
+      ${renderField("Rank", "input", "rank", character.rank)}
+      ${renderField("Role", "input", "purpose", character.purpose)}
+      ${renderField("Division", "select", "division", character.division, [["", "---"], ...divisions.map((item) => [item, item])])}
     </div>
     ${renderRankPicker(character)}
   `;
@@ -1227,8 +1208,8 @@ function renderValueStep(character) {
   const values = [...sampleValues, ...((species && species.values) || [])];
   const valueResults = filterExamples(values, character.uiSearch.value, (item) => item);
   return `
-    <h3>${character.type === "main" ? "Starting Value" : "Supervisory Value"}</h3>
-    <p class="source-note">${character.type === "main" ? "Main characters start with one value and define the rest in play." : "Supervisory supporting characters begin with one value and one Determination when introduced."}</p>
+    <h3>Starting Value</h3>
+    <p class="source-note">Main characters start with one value and define the rest in play.</p>
     <div class="field-grid">
       ${[0, 1, 2, 3].map((index) => renderField(`Value ${index + 1}`, "input", `values.${index}`, character.values[index] || "")).join("")}
     </div>
@@ -1363,7 +1344,7 @@ function getCharacterWarnings(character, stepId = "all") {
     if (!character.name.trim()) warnings.push("Name is blank.");
     if (character.type === "main" && !character.role.trim()) warnings.push("Main character role is blank.");
     if (character.type !== "main" && !character.purpose.trim()) warnings.push("Supporting character purpose is blank.");
-    if (!character.rank.trim()) warnings.push("Rank or title is blank.");
+    if (!character.rank.trim()) warnings.push("Rank is blank.");
     if (character.type !== "main" && rankAboveLieutenant(character.rank)) warnings.push("Supporting characters normally should not have a rank above lieutenant.");
   }
 
@@ -1397,7 +1378,7 @@ function getCharacterWarnings(character, stepId = "all") {
   }
 
   if (include("value", "review")) {
-    if ((character.type === "main" || character.type === "supervisory") && !character.values[0]?.trim()) {
+    if (character.type === "main" && !character.values[0]?.trim()) {
       warnings.push("Starting value is blank.");
     }
   }
@@ -1462,7 +1443,7 @@ function renderRankPicker(character) {
   const rankResults = filterExamples(rankExamples, character.uiSearch.rank, (item) => item);
   return `
     <div class="example-panel">
-      ${renderSearchInput("Rank and title examples", "rank", character.uiSearch.rank)}
+      ${renderSearchInput("Rank examples", "rank", character.uiSearch.rank)}
       <div class="chip-list">
         ${rankResults.map((rank) => `
           <button type="button" class="example-chip" data-action="set-character-field" data-field="rank" data-value="${escapeHtml(rank)}">${escapeHtml(rank)}</button>
@@ -1521,7 +1502,7 @@ function renderEditableSheet(character) {
         <div class="field-grid">
           ${renderField("Name", "input", "name", character.name)}
           ${renderField("Rank / title", "input", "rank", character.rank)}
-          ${renderField(character.type === "main" ? "Role" : "Purpose", "input", character.type === "main" ? "role" : "purpose", character.type === "main" ? character.role : character.purpose)}
+          ${renderField("Role", "input", character.type === "main" ? "role" : "purpose", character.type === "main" ? character.role : character.purpose)}
           ${renderField("Division / department", "input", "division", character.division)}
           ${renderField("Species", "input", "species", character.species)}
           ${renderField("Species trait", "input", "speciesTrait", character.speciesTrait)}
@@ -1794,9 +1775,9 @@ function renderShipSheet(ship) {
     <div class="field-grid">
       ${renderShipField(ship.id, "Name", "name", ship.name)}
       ${renderShipField(ship.id, "Scale", "scale", ship.scale, "number")}
-      ${renderShipField(ship.id, "Resistance", "resistance", ship.resistance, "number")}
       ${renderShipField(ship.id, "Max shields", "shields", ship.shields, "number")}
       ${renderShipField(ship.id, "Current shields", "currentShields", ship.currentShields, "number")}
+      ${renderShipField(ship.id, "Resistance", "resistance", ship.resistance, "number")}
       ${renderShipField(ship.id, "Reserve Power", "reservePower", ship.reservePower, "reserve-select")}
     </div>
 
