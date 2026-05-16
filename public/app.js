@@ -842,28 +842,6 @@ const glossary = [
   ["Versatile X", "Starship weapon quality: on a successful attack, gain X bonus Momentum; it cannot be saved.", "p. 227"]
 ];
 
-function loadGlossaryAdditions() {
-  supplementDataSources().forEach((sourcebook) => {
-    (sourcebook.characterTraitAdditions || []).forEach((entry) => addUniqueGlossaryEntry(entry));
-    (sourcebook.terrainTraitAdditions || []).forEach((trait) => {
-      addUniqueGlossaryEntry([
-        trait,
-        "Exploration Guide environmental or scene trait for planetary biome encounters.",
-        "STA 2e Exploration Guide, pp. 51-134"
-      ]);
-    });
-  });
-  glossary.sort(([a], [b]) => a.localeCompare(b));
-}
-
-function addUniqueGlossaryEntry([term, definition, page]) {
-  if (!glossary.some(([existingTerm]) => existingTerm.toLowerCase() === term.toLowerCase())) {
-    glossary.push([term, definition, page]);
-  }
-}
-
-loadGlossaryAdditions();
-
 const momentumSpends = {
   Roleplay: [
     ["Purchase Dice", "1-3 Momentum, Immediate, Repeatable", "Before attempting a task, buy up to three extra d20s. The first die costs 1, the second costs 2 more, and the third costs 3 more; the pool cannot exceed 5d20.", "p. 260"],
