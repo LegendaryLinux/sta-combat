@@ -882,16 +882,30 @@ button:disabled {
 .active-ship-card {
   display: grid;
   gap: 8px;
+  position: relative;
   width: 100%;
-  padding: 10px;
+  padding: 10px 38px 10px 10px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--panel-2);
   color: var(--ink);
+  cursor: grab;
   text-align: left;
 }
 
-.active-ship-card strong {
+.active-ship-select {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.active-ship-select strong {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -904,10 +918,76 @@ button:disabled {
   background: #222b38;
 }
 
+.active-ship-card.is-dragging {
+  opacity: 0.48;
+}
+
+.active-ship-card.drop-before {
+  box-shadow: inset 0 3px 0 var(--accent);
+}
+
+.active-ship-card.drop-after {
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
 .active-ship-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+}
+
+.active-ship-empty,
+.empty-ship-placeholder {
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  min-height: 160px;
+  padding: 18px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  color: var(--muted);
+  text-align: center;
+}
+
+.active-ship-empty {
+  min-height: 116px;
+}
+
+.active-ship-empty strong,
+.empty-ship-placeholder h3 {
+  color: var(--ink);
+  margin-bottom: 0;
+}
+
+.remove-ship-button {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  padding: 0;
+  border: 1px solid #5b4246;
+  border-radius: 4px;
+  background: #3a2b2d;
+  color: #d8b9b9;
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.remove-ship-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.add-ship-button {
+  width: 100%;
+  margin-top: 10px;
 }
 
 .ship-block {
@@ -1078,10 +1158,10 @@ button:disabled {
 }
 
 .check-item.action-row {
-  grid-template-columns: 18px minmax(120px, 0.28fr) minmax(220px, 1fr) auto;
+  grid-template-columns: 18px minmax(120px, 0.24fr) minmax(0, 1fr) auto;
   gap: 8px;
-  align-items: center;
-  padding: 7px 9px;
+  align-items: start;
+  padding: 9px;
 }
 
 .check-item.action-row input {

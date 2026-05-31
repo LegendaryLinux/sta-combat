@@ -728,10 +728,10 @@ const starshipStations = [
     name: "Command",
     minor: [],
     major: [
-      ["Assist", "Assist two characters instead of one when coordinating from command.", "p. 301"],
-      ["Create Trait", "Establish battle plans, priorities, strategies, or similar command advantages.", "p. 301"],
-      ["Direct", "Spend 1 Momentum so one bridge ally immediately takes a major action; assist with Control + Command.", "p. 301"],
-      ["Rally", "Attempt Presence + Command Difficulty 0 to generate Momentum.", "p. 301"]
+      ["Assist", "Assist two allied tasks instead of one.", "p. 301"],
+      ["Create Trait", "Task: Difficulty 2, usually Control/Insight/Reason + Command. Create, change, or remove a trait.", "p. 301"],
+      ["Direct", "Cost: 1 Momentum. One bridge ally immediately takes a major action; assist with Control + Command, 1d20.", "p. 301"],
+      ["Rally", "Task: Presence + Command, Difficulty 0. Generate Momentum.", "p. 301"]
     ]
   },
   {
@@ -739,25 +739,25 @@ const starshipStations = [
     name: "Communications",
     minor: [],
     major: [
-      ["Create Trait", "Boost, recalibrate, secure, decrypt, or coordinate communications.", "p. 301"],
-      ["Damage Control", "Direct teams to patch one breach with Presence + Engineering.", "p. 301"],
-      ["Transport", "Coordinate transporters remotely; bridge operation increases Difficulty.", "p. 301"]
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a communications/coordination trait.", "p. 301"],
+      ["Damage Control", "Task: Presence + Engineering, Difficulty 2, +1 per extra Potency. Success patches one breach.", "p. 301"],
+      ["Transport", "Use transporter task rules; +1 Difficulty when operated from the bridge.", "p. 301"]
     ]
   },
   {
     id: "helm",
     name: "Helm",
     minor: [
-      ["Impulse", "Move up to two zones; one-zone movement can ease difficult terrain costs.", "p. 302"],
-      ["Thrusters", "Make fine positional adjustments within the current zone, including safe Contact.", "p. 302"]
+      ["Impulse", "Move up to 2 zones within Long range. If moving 1 zone, reduce difficult/hazardous terrain Momentum cost by 1.", "p. 302"],
+      ["Thrusters", "Move anywhere within current zone; may safely enter Contact.", "p. 302"]
     ],
     major: [
-      ["Attack Pattern", "Fly steadily to assist ship attacks, but enemy attacks become easier until your next turn.", "p. 302"],
-      ["Create Trait", "Use careful positioning or skilled maneuvering to create an advantage.", "p. 302"],
-      ["Evasive Action", "Make enemy attacks opposed by your piloting, while your ship's attacks become harder.", "p. 302"],
-      ["Maneuver", "Attempt Control + Conn Difficulty 0 to generate Momentum for movement.", "p. 302"],
-      ["Ram", "Move into Contact and make a collision attack against a close target.", "p. 302"],
-      ["Warp", "Requires Reserve Power and Prepare; move many zones or leave the battlefield.", "p. 302"]
+      ["Attack Pattern", "Until next turn, assist each ship attack with Control + Conn. Attacks against your ship are -1 Difficulty.", "p. 302"],
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a positioning/maneuvering trait.", "p. 302"],
+      ["Evasive Action", "Opposed defense: Daring + Conn, assisted by Structure + Conn. Win: move 1 zone. Ship attacks are +1 Difficulty. Cannot combine with Defensive Fire.", "p. 302"],
+      ["Maneuver", "Task: Control + Conn, Difficulty 0, assisted by Engines + Conn. Generate Momentum.", "p. 302"],
+      ["Ram", "Target within Close; move into Contact. Attack: Daring + Conn, Difficulty 2, assisted by Engines + Conn. Inflict collision damage with Intense; suffer target collision damage.", "p. 302"],
+      ["Warp", "Requires Reserve Power + Prepare. Task: Control + Conn, Difficulty 1, assisted by Engines + Conn. Move zones equal to Engines or leave battle.", "p. 302"]
     ]
   },
   {
@@ -765,8 +765,8 @@ const starshipStations = [
     name: "Navigator",
     minor: [],
     major: [
-      ["Assist", "Assist the officer at the helm.", "p. 303"],
-      ["Create Trait", "Plot courses, chart hazards, or study terrain.", "p. 303"]
+      ["Assist", "Assist helm tasks.", "p. 303"],
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a course/terrain trait.", "p. 303"]
     ]
   },
   {
@@ -774,42 +774,42 @@ const starshipStations = [
     name: "Operations/Engineering",
     minor: [],
     major: [
-      ["Create Trait", "Represent modifications or adjustments to ship systems.", "p. 303"],
-      ["Damage Control", "Patch a breach with Presence + Engineering.", "p. 303"],
-      ["Regain Power", "Attempt Control + Engineering to restore Reserve Power; each scene attempt gets harder.", "p. 303"],
-      ["Regenerate Shields", "Requires Reserve Power; restore shields with Control + Engineering.", "p. 303"],
-      ["Reroute Power", "Requires Reserve Power; empower the next action using a chosen system.", "p. 303"],
-      ["Transport", "Operate transporters remotely from bridge or engineering controls.", "p. 303"]
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a ship-system trait.", "p. 303"],
+      ["Damage Control", "Task: Presence + Engineering, Difficulty 2, +1 per extra Potency. Success patches one breach.", "p. 303"],
+      ["Regain Power", "Task: Control + Engineering, Difficulty 1; may Succeed at Cost. Restore Reserve Power. Difficulty +1 per scene attempt.", "p. 303"],
+      ["Regenerate Shields", "Requires Reserve Power. Task: Control + Engineering, Difficulty 2, assisted by Structure + Engineering; +1 Difficulty if shields are 0. Restore Engineering shields, +2 per Momentum.", "p. 303"],
+      ["Reroute Power", "Requires Reserve Power. Apply Reserve Power to one system for the next action using that system.", "p. 303"],
+      ["Transport", "Use transporter task rules; +1 Difficulty when operated from the bridge.", "p. 303"]
     ]
   },
   {
     id: "sensors",
     name: "Sensor Operations",
     minor: [
-      ["Calibrate Sensors", "On your next sensor action, ignore one affecting trait or re-roll one d20.", "p. 304"],
-      ["Launch Probe", "Place a probe in a zone within Long range and use it as a sensor origin.", "p. 304"]
+      ["Calibrate Sensors", "Next Sensor Operations action: ignore one affecting trait or reroll 1d20.", "p. 304"],
+      ["Launch Probe", "Place probe in one zone within Long range. Sensor actions may use probe position for range. Probe is Small Craft; any damage destroys it.", "p. 304"]
     ],
     major: [
-      ["Create Trait", "Turn detected information into a scene advantage.", "p. 304"],
-      ["Reveal", "Search for hidden or cloaked vessels within Long range.", "p. 304"],
-      ["Scan For Weakness", "Set up the next attack against a vessel for extra damage or Piercing.", "p. 304"],
-      ["Sensor Sweep", "Scan a zone for ships, objects, and phenomena.", "p. 304"]
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a sensor-information trait.", "p. 304"],
+      ["Reveal", "Task: Reason + Science, Difficulty 3, assisted by Sensors + Science. Success reveals one hidden vessel's zone within Long range; attacks against it are +2 Difficulty until it moves.", "p. 304"],
+      ["Scan For Weakness", "Task: Control + Science, Difficulty 2, assisted by Sensors + Security. Next attack against target gains +2 damage or Piercing.", "p. 304"],
+      ["Sensor Sweep", "Task: Reason + Science, Difficulty 1, assisted by Sensors + Science. Scan one zone; Momentum buys extra information.", "p. 304"]
     ]
   },
   {
     id: "tactical",
     name: "Tactical",
     minor: [
-      ["Calibrate Weapons", "Increase damage by 1 on the next ship weapon attack.", "p. 305"],
-      ["Prepare", "Raise/lower shields or arm/disarm weapons.", "p. 305"],
-      ["Targeting Solution", "Set up the next attack to re-roll a d20 or choose the hit system.", "p. 305"]
+      ["Calibrate Weapons", "Next ship weapon attack: +1 damage.", "p. 305"],
+      ["Prepare", "Raise/lower shields or arm/disarm weapons. Lowered shields: maximum shields 0. Raised shields: restore normal max or previous damaged total.", "p. 305"],
+      ["Targeting Solution", "Choose enemy vessel within Long range. Next attack against it: reroll 1d20 or choose hit system.", "p. 305"]
     ],
     major: [
-      ["Create Trait", "Create weapon-system or targeting advantages.", "p. 305"],
-      ["Defensive Fire", "Make enemy attacks opposed. If successful, you may spend 2 Momentum to counterattack with an available energy weapon.", "p. 305"],
-      ["Fire", "Attack with an energy weapon or torpedo; torpedo attacks add Threat.", "p. 305"],
-      ["Modulate Shields", "If shields are not at 0, increase Resistance until your next turn.", "p. 305"],
-      ["Tractor Beam", "Attempt to immobilize a close object or vessel.", "p. 305"]
+      ["Create Trait", "Task: Difficulty 2. Create, change, or remove a weapon/targeting trait.", "p. 305"],
+      ["Defensive Fire", "Choose one energy weapon. Opposed defense: Daring + Security, assisted by Weapons + Security. Win: spend 2 Momentum to counterattack. Cannot combine with Evasive Action.", "p. 305"],
+      ["Fire", "Attack with one energy or torpedo weapon. Energy attack Difficulty 2; torpedo attack Difficulty 3 and +1 Threat.", "p. 305"],
+      ["Modulate Shields", "Requires shields above 0. Until next turn: +2 Resistance.", "p. 305"],
+      ["Tractor Beam", "Target within Close. Task: Control + Security, Difficulty 2, assisted by Structure + Security. Success immobilizes target; break-free Difficulty equals tractor strength.", "p. 305"]
     ]
   }
 ];
@@ -934,17 +934,18 @@ function defaultState() {
   return {
     settings: {
       activeTab: "character",
-      shipCount: 1,
+      shipCount: 0,
       selectedCharacterId: "",
       selectedShipId: "",
       glossarySearch: ""
     },
     characters: [],
-    ships: [createShip(1)]
+    ships: []
   };
 }
 
 let state = loadState();
+let draggedShipId = "";
 
 function loadState() {
   try {
@@ -961,7 +962,7 @@ function ensureState(nextState) {
   const merged = {
     settings: { ...base.settings, ...(nextState.settings || {}) },
     characters: Array.isArray(nextState.characters) ? nextState.characters : [],
-    ships: Array.isArray(nextState.ships) && nextState.ships.length ? nextState.ships : base.ships
+    ships: Array.isArray(nextState.ships) ? nextState.ships : []
   };
 
   if (merged.characters.length === 0) {
@@ -984,9 +985,13 @@ function ensureState(nextState) {
     departments: { ...createShip().departments, ...(ship.departments || {}) },
     actions: ship.actions || {}
   }));
-  merged.settings.shipCount = Math.max(1, Number(merged.settings.shipCount) || merged.ships.length || 1);
-  syncShipCount(merged, merged.settings.shipCount);
-  if (!merged.ships.slice(0, merged.settings.shipCount).some((ship) => ship.id === merged.settings.selectedShipId)) {
+  const visibleShipCount = Math.max(0, Math.min(12, Number(merged.settings.shipCount) || merged.ships.length || 0));
+  syncShipCount(merged, visibleShipCount);
+  merged.ships = merged.ships.slice(0, visibleShipCount);
+  merged.settings.shipCount = merged.ships.length;
+  if (!merged.ships.length) {
+    merged.settings.selectedShipId = "";
+  } else if (!merged.ships.some((ship) => ship.id === merged.settings.selectedShipId)) {
     merged.settings.selectedShipId = merged.ships[0].id;
   }
   return merged;
@@ -1025,14 +1030,54 @@ function normalizeCharacter(character) {
 }
 
 function syncShipCount(targetState, count) {
-  const nextCount = Math.max(1, Math.min(12, Number(count) || 1));
+  const nextCount = Math.max(0, Math.min(12, Number(count) || 0));
   targetState.settings.shipCount = nextCount;
   while (targetState.ships.length < nextCount) {
     targetState.ships.push(createShip(targetState.ships.length + 1));
   }
-  if (!targetState.ships.slice(0, nextCount).some((ship) => ship.id === targetState.settings.selectedShipId)) {
+  if (!nextCount) {
+    targetState.settings.selectedShipId = "";
+  } else if (!targetState.ships.slice(0, nextCount).some((ship) => ship.id === targetState.settings.selectedShipId)) {
     targetState.settings.selectedShipId = targetState.ships[0].id;
   }
+}
+
+function addShip() {
+  if (state.ships.length >= 12) return;
+  const ship = createShip(state.ships.length + 1);
+  state.ships.push(ship);
+  state.settings.shipCount = state.ships.length;
+  state.settings.selectedShipId = ship.id;
+}
+
+function removeShip(shipId) {
+  const index = state.ships.findIndex((ship) => ship.id === shipId);
+  if (index === -1) return;
+  const wasSelected = state.settings.selectedShipId === shipId;
+  state.ships.splice(index, 1);
+  state.settings.shipCount = state.ships.length;
+  if (!state.ships.length) {
+    state.settings.selectedShipId = "";
+  } else if (wasSelected || !state.ships.some((ship) => ship.id === state.settings.selectedShipId)) {
+    const nextIndex = Math.min(index, state.ships.length - 1);
+    state.settings.selectedShipId = state.ships[nextIndex].id;
+  }
+}
+
+function reorderShip(draggedId, targetId, placement) {
+  if (!draggedId || !targetId || draggedId === targetId) return false;
+  const fromIndex = state.ships.findIndex((ship) => ship.id === draggedId);
+  if (fromIndex === -1) return false;
+  const [ship] = state.ships.splice(fromIndex, 1);
+  const targetIndex = state.ships.findIndex((item) => item.id === targetId);
+  if (targetIndex === -1) {
+    state.ships.splice(fromIndex, 0, ship);
+    return false;
+  }
+  const insertIndex = placement === "after" ? targetIndex + 1 : targetIndex;
+  state.ships.splice(insertIndex, 0, ship);
+  state.settings.shipCount = state.ships.length;
+  return true;
 }
 
 function saveState() {
@@ -1785,15 +1830,12 @@ function renderActionCards(actions, kind) {
 }
 
 function renderSpaceTab() {
-  const activeShips = state.ships.slice(0, state.settings.shipCount);
+  const activeShips = state.ships;
   const selectedShip = activeShips.find((ship) => ship.id === state.settings.selectedShipId) || activeShips[0];
-  const selectedIndex = activeShips.findIndex((ship) => ship.id === selectedShip.id);
+  const selectedIndex = selectedShip ? activeShips.findIndex((ship) => ship.id === selectedShip.id) : -1;
   const controls = `
     <div class="ship-controls">
-      <label>Ships displayed
-        <input type="number" min="1" max="12" value="${state.settings.shipCount}" data-action="ship-count">
-      </label>
-      <button class="danger-button" type="button" data-action="clear-all-actions">Clear All Actions</button>
+      <button class="danger-button" type="button" data-action="clear-all-actions" ${activeShips.length ? "" : "disabled"}>Clear All Ship Actions</button>
     </div>
   `;
   return `
@@ -1804,14 +1846,33 @@ function renderSpaceTab() {
     )}
     <div class="space-combat-layout">
       <div class="space-main">
-        ${renderShip(selectedShip, selectedIndex)}
+        ${selectedShip ? renderShip(selectedShip, selectedIndex) : renderNoShipPlaceholder()}
       </div>
       <aside class="active-ships-panel">
         <h3>Active Combat</h3>
         <div class="active-ship-list">
-          ${activeShips.map((ship, index) => renderActiveShipCard(ship, index, ship.id === selectedShip.id)).join("")}
+          ${activeShips.length ? activeShips.map((ship, index) => renderActiveShipCard(ship, index, selectedShip && ship.id === selectedShip.id)).join("") : renderNoActiveShipsPlaceholder()}
         </div>
+        <button class="primary-button add-ship-button" type="button" data-action="add-ship" ${state.ships.length >= 12 ? "disabled" : ""}>Add Ship</button>
       </aside>
+    </div>
+  `;
+}
+
+function renderNoShipPlaceholder() {
+  return `
+    <section class="ship-block empty-ship-placeholder">
+      <h3>No Ship Added</h3>
+      <p class="source-note">Add a ship from Active Combat to display its combat sheet and station actions.</p>
+    </section>
+  `;
+}
+
+function renderNoActiveShipsPlaceholder() {
+  return `
+    <div class="active-ship-empty">
+      <strong>No ships added</strong>
+      <span>Add a ship to begin tracking combat actions.</span>
     </div>
   `;
 }
@@ -1829,13 +1890,16 @@ function renderActiveShipCard(ship, index, isSelected) {
   }, { major: 0, majorTotal: 0, minor: 0, minorTotal: 0 });
 
   return `
-    <button type="button" class="active-ship-card ${isSelected ? "is-active" : ""}" data-action="select-ship" data-ship-id="${ship.id}">
-      <strong data-active-ship-name="${ship.id}">${escapeHtml(ship.name || `Ship ${index + 1}`)}</strong>
-      <div class="active-ship-actions">
-        <span class="availability ${stationStatus.major === stationStatus.majorTotal ? "used" : "available"}">Major ${stationStatus.major}/${stationStatus.majorTotal}</span>
-        <span class="availability ${stationStatus.minorTotal && stationStatus.minor === stationStatus.minorTotal ? "used" : "available"}">Minor ${stationStatus.minor}/${stationStatus.minorTotal}</span>
-      </div>
-    </button>
+    <article class="active-ship-card ${isSelected ? "is-active" : ""}" data-ship-id="${ship.id}" data-draggable-ship="true" draggable="true">
+      <button type="button" class="active-ship-select" data-action="select-ship" data-ship-id="${ship.id}">
+        <strong data-active-ship-name="${ship.id}">${escapeHtml(ship.name || `Ship ${index + 1}`)}</strong>
+        <div class="active-ship-actions">
+          <span class="availability ${stationStatus.major === stationStatus.majorTotal ? "used" : "available"}">Major ${stationStatus.major}/${stationStatus.majorTotal}</span>
+          <span class="availability ${stationStatus.minorTotal && stationStatus.minor === stationStatus.minorTotal ? "used" : "available"}">Minor ${stationStatus.minor}/${stationStatus.minorTotal}</span>
+        </div>
+      </button>
+      <button type="button" class="remove-ship-button" data-action="remove-ship" data-ship-id="${ship.id}" aria-label="Remove ${escapeHtml(ship.name || `Ship ${index + 1}`)}">X</button>
+    </article>
   `;
 }
 
@@ -1850,7 +1914,7 @@ function renderShip(ship, index) {
       <div class="ship-title">
         <h3 data-ship-title="${ship.id}">${escapeHtml(ship.name || `Ship ${index + 1}`)}</h3>
         <div class="button-row">
-          <button class="secondary-button" type="button" data-action="clear-ship-actions" data-ship-id="${ship.id}">Clear Ship Actions</button>
+          <button class="danger-button" type="button" data-action="clear-ship-actions" data-ship-id="${ship.id}">Clear Ship Actions</button>
         </div>
       </div>
       <div class="ship-layout">
@@ -1983,7 +2047,7 @@ function renderChecklist(ship, station, kind) {
 }
 
 function refreshShipActionIndicators(ship) {
-  const activeShips = state.ships.slice(0, state.settings.shipCount);
+  const activeShips = state.ships;
   const shipIndex = activeShips.findIndex((item) => item.id === ship.id);
   starshipStations.forEach((station) => {
     const stationElement = document.querySelector(`[data-ship-id="${ship.id}"] [data-station-id="${station.id}"]`);
@@ -2007,13 +2071,70 @@ function refreshShipActionIndicators(ship) {
 }
 
 function refreshShipName(ship) {
-  const activeShips = state.ships.slice(0, state.settings.shipCount);
+  const activeShips = state.ships;
   const shipIndex = activeShips.findIndex((item) => item.id === ship.id);
   const fallbackName = shipIndex >= 0 ? `Ship ${shipIndex + 1}` : "Ship";
   const label = ship.name || fallbackName;
   document.querySelectorAll(`[data-ship-title="${ship.id}"], [data-active-ship-name="${ship.id}"]`).forEach((element) => {
     element.textContent = label;
   });
+}
+
+function shipDropPlacement(event, card) {
+  const rect = card.getBoundingClientRect();
+  return event.clientY > rect.top + rect.height / 2 ? "after" : "before";
+}
+
+function clearShipDropIndicators() {
+  document.querySelectorAll(".active-ship-card.drop-before, .active-ship-card.drop-after, .active-ship-card.is-dragging").forEach((card) => {
+    card.classList.remove("drop-before", "drop-after", "is-dragging");
+  });
+}
+
+function handleShipDragStart(event) {
+  const card = event.target.closest(".active-ship-card[data-draggable-ship]");
+  if (!card || event.target.closest(".remove-ship-button")) return;
+  draggedShipId = card.dataset.shipId || "";
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("text/plain", draggedShipId);
+  requestAnimationFrame(() => {
+    card.classList.add("is-dragging");
+  });
+}
+
+function handleShipDragOver(event) {
+  if (!draggedShipId) return;
+  const card = event.target.closest(".active-ship-card[data-draggable-ship]");
+  if (!card || card.dataset.shipId === draggedShipId) return;
+  event.preventDefault();
+  event.dataTransfer.dropEffect = "move";
+  const placement = shipDropPlacement(event, card);
+  document.querySelectorAll(".active-ship-card.drop-before, .active-ship-card.drop-after").forEach((item) => {
+    if (item !== card) item.classList.remove("drop-before", "drop-after");
+  });
+  card.classList.toggle("drop-before", placement === "before");
+  card.classList.toggle("drop-after", placement === "after");
+}
+
+function handleShipDrop(event) {
+  if (!draggedShipId) return;
+  const card = event.target.closest(".active-ship-card[data-draggable-ship]");
+  if (!card) return;
+  event.preventDefault();
+  const targetShipId = card.dataset.shipId || "";
+  const placement = shipDropPlacement(event, card);
+  const changed = reorderShip(draggedShipId, targetShipId, placement);
+  draggedShipId = "";
+  clearShipDropIndicators();
+  if (changed) {
+    saveState();
+    render();
+  }
+}
+
+function handleShipDragEnd() {
+  draggedShipId = "";
+  clearShipDropIndicators();
 }
 
 function renderGlossaryTab() {
@@ -2082,7 +2203,7 @@ function handleClick(event) {
 
   const action = event.target.closest("[data-action]");
   if (!action) return;
-  if (["ship-count", "toggle-ship-action", "toggle-equipment"].includes(action.dataset.action)) return;
+  if (["toggle-ship-action", "toggle-equipment"].includes(action.dataset.action)) return;
 
   if (action.dataset.action === "add-character") {
     const character = createCharacter("main");
@@ -2096,6 +2217,14 @@ function handleClick(event) {
 
   if (action.dataset.action === "select-ship") {
     state.settings.selectedShipId = action.dataset.shipId;
+  }
+
+  if (action.dataset.action === "add-ship") {
+    addShip();
+  }
+
+  if (action.dataset.action === "remove-ship") {
+    removeShip(action.dataset.shipId);
   }
 
   if (action.dataset.action === "wizard-step") {
@@ -2300,13 +2429,6 @@ function handleInput(event) {
     return;
   }
 
-  if (event.target.matches("[data-action='ship-count']")) {
-    syncShipCount(state, event.target.value);
-    saveState();
-    render();
-    return;
-  }
-
   if (event.target.matches("[data-action='toggle-ship-action']")) {
     const ship = state.ships.find((item) => item.id === event.target.dataset.shipId);
     if (ship) {
@@ -2327,4 +2449,8 @@ function handleInput(event) {
 document.addEventListener("click", handleClick);
 document.addEventListener("input", handleInput);
 document.addEventListener("change", handleInput);
+document.addEventListener("dragstart", handleShipDragStart);
+document.addEventListener("dragover", handleShipDragOver);
+document.addEventListener("drop", handleShipDrop);
+document.addEventListener("dragend", handleShipDragEnd);
 render();
